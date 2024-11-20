@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Management - FoodDeck</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">FoodDeck</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Products</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/orders">Orders</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron text-center">
+    <h1 class="display-4">Manage Orders</h1>
+    <p class="lead">Edit the status of orders or view details.</p>
+    <hr class="my-4">
+    <p>All current orders are listed below.</p>
+  </div>
+
+  <!-- Orders Section -->
+  <div class="container">
+    <div class="row">
+      <% if (orders.length > 0) { %>
+        <% orders.forEach(order => { %>
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Order ID: <%= order._id %></h5>
+                <p class="card-text"><strong>Customer:</strong> <%= order.customerName %></p>
+                <p class="card-text"><strong>Status:</strong> <%= order.status %></p>
+                <p class="card-text"><strong>Total Price:</strong> $<%= order.totalPrice %></p>
+                <a href="/orders/<%= order._id %>" class="btn btn-primary">Edit Order</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-md-12 text-center">
+          <p class="lead">No orders yet</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

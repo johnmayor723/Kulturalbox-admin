@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Product Management</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/orders">Orders</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron">
+    <h1 class="display-4">Manage Product: <%= product.name %></h1>
+    <p class="lead">Edit the details of this product or delete it if needed.</p>
+    <hr class="my-4">
+    <p>Product ID: <%= product._id %></p>
+  </div>
+
+  <!-- Product Details Card -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm">
+          <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text">Category: <%= product.category %></p>
+            <p class="card-text">Price: $<%= product.price %></p>
+            <p class="card-text">Description: <%= product.description %></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Measurements Display Card -->
+      <div class="col-md-6">
+        <h3>Measurements</h3>
+        <% if (product.measurements && product.measurements.length > 0) { %>
+          <% product.measurements.forEach((measurement, index) => { %>
+            <div class="card mb-3">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="<%= measurement.imageUrl %>" alt="<%= measurement.name %>" class="card-img">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= measurement.name %></h5>
+                    <p class="card-text">Price: $<%= measurement.price %></p>
+                    <% if (measurement.quantity) { %>
+                      <p class="card-text">Quantity: <%= measurement.quantity %></p>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p>No measurements available for this product.</p>
+        <% } %>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="col-md-12 mt-5">
+        <h3>Edit Product</h3>
+        <form action="/products/edit/<%= product._id %>?_method=PUT" method="POST">
+          <!-- Other product fields -->
+          
+          <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>">
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" name="category">
+              <option value="farm fresh">farm fresh</option>
+              <option value="tubers & grains">tubers & grains</option>
+              <option value="fruits">fruits</option>
+              <option value="fish & meat">fish & meat</option>
+              <option value="food bundles">food bundles</option>
+              <option value="ingredients & condiments">ingredients & condiments</option>
+              <option value="health foods">health foods</option>
+              <option value="household items">household items</option>
+              <option value="baking products">baking products</option>
+              <option value="dairy products">dairy products</option>
+              <option value="packaged foods">packaged foods</option>
+              <option value="drinks">Drinks</option>
+             <option value="beverages">Beverages</option>
+             <option value="cereals">Cereals</option>
+              <option value="oil products">oil products</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>">
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"><%= product.description %></textarea>
+          </div>
+          <div class="form-group">
+            <label for="imageUrl">Image URL</label>
+            <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="<%= product.imageUrl %>">
+          </div>
+          <!-- Measurements Edit Section -->
+          <h4>Edit Measurements</h4>
+          <div id="measurements">
+            <% if (product.measurements && product.measurements.length > 0) { %>
+              <% product.measurements.forEach((measurement, index) => { %>
+                <div class="measurement-item mb-3">
+                  <div class="form-group">
+                    <label>Measurement Name</label>
+                    <input type="text" name="measurements[<%= index %>][name]" class="form-control" value="<%= measurement.name %>">
+                  </div>
+                  <div class="form-group">
+                    <label>Measurement Price</label>
+                    <input type="number" name="measurements[<%= index %>][price]" class="form-control" value="<%= measurement.price %>">
+                  </div>
+                  <div class="form-group">
+                    <label>Measurement Image URL</label>
+                    <input type="text" name="measurements[<%= index %>][imageUrl]" class="form-control" value="<%= measurement.imageUrl %>">
+                  </div>
+                  
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+
+          <!-- Button to add new measurement -->
+          <button type="button" id="add-measurement" class="btn btn-secondary mb-3">Add Measurement</button>
+
+          <button type="submit" class="btn btn-primary">Update Product</button>
+        </form>
+
+        <!-- Delete Form -->
+        <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="mt-3">
+          <button type="submit" class="btn btn-danger">Delete Product</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS for Adding New Measurement Forms -->
+  <script>
+    document.getElementById('add-measurement').addEventListener('click', () => {
+      const measurementsDiv = document.getElementById('measurements');
+      const index = measurementsDiv.childElementCount;
+
+      const newMeasurement = document.createElement('div');
+      newMeasurement.classList.add('measurement-item', 'mb-3');
+      newMeasurement.innerHTML = `
+        <div class="form-group">
+          <label>Measurement Name</label>
+          <input type="text" name="measurements[${index}][name]" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Measurement Price</label>
+          <input type="number" name="measurements[${index}][price]" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Measurement Image URL</label>
+          <input type="text" name="measurements[${index}][imageUrl]" class="form-control">
+        </div>
+        
+      `;
+      measurementsDiv.appendChild(newMeasurement);
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

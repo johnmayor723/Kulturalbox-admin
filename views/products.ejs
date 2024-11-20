@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Management</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">FoodDeck</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/orders">Orders</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Products</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron text-center">
+    <h1>Product Management</h1>
+    <p>Manage your products by adding, editing, or deleting them</p>
+  </div>
+
+  <!-- Form to create a new product -->
+  <div class="container">
+    <h2>Create a New Product</h2>
+    <form action="/products/create" method="POST">
+      <div class="form-group">
+        <label for="name">Product Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name">
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" id="category" name="category">
+          <option value="farm fresh">farm fresh</option>
+          <option value="tubers & grains">tubers & grains</option>
+          <option value="fruits">fruits</option>
+          <option value="fish & meat">fish & meat</option>
+          <option value="food bundles">food bundles</option>
+          <option value="ingredients & condiments">ingredients & condiments</option>
+          <option value="health foods">health foods</option>
+          <option value="household items">household items</option>
+          <option value="baking products">baking products</option>
+          <option value="dairy products">dairy products</option>
+          <option value="packaged foods">packaged foods</option>
+          <option value="oil products">oil products</option>
+          <option value="drinks">Drinks</option>
+           <option value="beverages">Beverages</option>
+          <option value="cereals">Cereals</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="price" placeholder="Enter product price">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" placeholder="Enter product description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input type="text" class="form-control" id="imageUrl" name="imageUrl" placeholder="Enter product image URL">
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input type="number" class="form-control" id="stock" name="stock" placeholder="Number of Stock">
+      </div>
+
+
+
+      <!-- Measurement Section -->
+      <div id="measurements-container">
+        <h3>Product Buying Options</h3>
+        <button type="button" class="btn btn-secondary mb-3" onclick="addMeasurement()">Add Measurement</button>
+        <div class="measurement-item form-group">
+          <label>Measurement Name</label>
+          <input type="text" class="form-control" name="measurements[0][name]" placeholder="Measurement name">
+          <label>Measurement Price</label>
+          <input type="number" class="form-control" name="measurements[0][price]" placeholder="Measurement price">
+          <label>Measurement Image URL</label>
+          <input type="text" class="form-control" name="measurements[0][imageUrl]" placeholder="Image URL">
+          
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Create Product</button>
+    </form>
+  </div>
+  <!-- Product Grid -->
+  <div class="container mt-5">
+    <h2>All Products</h2>
+    <div class="row">
+      <!-- Check if products exist -->
+      <% if (products && products.length > 0) { %>
+        <% products.forEach(product => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="<%= product.imageUrl %>" class="card-img-top" alt="<%= product.name %>">
+              <div class="card-body">
+                <h5 class="card-title"><%= product.name %></h5>
+                <p class="card-text">Category: <%= product.category %></p>
+                <p class="card-text">Price: $<%= product.price %></p>
+                <p class="card-text"><%= product.description %></p>
+                <a href="/products/<%= product._id %>" class="btn btn-warning">Edit</a>
+                <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="d-inline">
+                  <button class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No products available.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Add Bootstrap JS -->
+
+  <script>
+    let measurementCount = 1;
+
+    function addMeasurement() {
+      const container = document.getElementById('measurements-container');
+      const measurementItem = document.createElement('div');
+      measurementItem.className = 'measurement-item form-group mt-4';
+      measurementItem.innerHTML = `
+        <label>Measurement Name</label>
+        <input type="text" class="form-control" name="measurements[${measurementCount}][name]" placeholder=" name">
+        <label>Measurement Price</label>
+        <input type="number" class="form-control" name="measurements[${measurementCount}][price]" placeholder=" price">
+        <label>Measurement Image URL</label>
+        <input type="text" class="form-control" name="measurements[${measurementCount}][imageUrl]" placeholder="Image URL">
+      `;
+      container.appendChild(measurementItem);
+      measurementCount++;
+    }
+  </script>
+
+  <!-- Add Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

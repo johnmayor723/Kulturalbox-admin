@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+const BURL = "http://api.kulturalbox.com.ng/api";
 // Get all orders
 router.get('/', (req, res) => {
-  axios.get('https://kulturalbox-server.onrender.com/api/orders')
+  axios.get(`${BURL}/orders`)
     .then(response => {
       res.render('orders', { orders: response.data });
     })
@@ -17,7 +18,7 @@ router.get('/', (req, res) => {
 // Get single order by ID
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  axios.get(`https://kulturalbox-server.onrender.com/api/orders/${id}`)
+  axios.get(`${BURL}/orders/${id}`)
     .then(response => {
       res.render('order', { order: response.data });
     })
@@ -30,7 +31,7 @@ router.get('/:id', (req, res) => {
 // Create a new order
 router.post('/create', (req, res) => {
   const { customerName, items, total, status } = req.body;
-  axios.post('https://kulturalbox-server.onrender.com/api/orders', { customerName, items, total, status })
+  axios.post(`${BURL}/orders`, { customerName, items, total, status })
     .then(response => {
       res.redirect('/orders');
     })
@@ -44,7 +45,7 @@ router.post('/create', (req, res) => {
 router.post('/edit/:id', (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  axios.put(`https://kulturalbox-server.onrender.com/api/orders/${id}`, { status })
+  axios.put(`${BURL}/orders/${id}`, { status })
     .then(response => {
       res.redirect(`/orders/${id}`);
     })
@@ -57,7 +58,7 @@ router.post('/edit/:id', (req, res) => {
 // Delete an order
 router.post('/delete/:id', (req, res) => {
   const { id } = req.params;
-  axios.delete(`https://kulturalbox-server.onrender.com/api/orders/${id}`)
+  axios.delete(`${BURL}/orders/${id}`)
     .then(response => {
       res.redirect('/orders');
     })

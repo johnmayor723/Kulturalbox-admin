@@ -19,7 +19,7 @@ app.use('/', indexRoute);
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

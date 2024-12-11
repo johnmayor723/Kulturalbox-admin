@@ -5,7 +5,7 @@ const axios = require('axios');
 // Get all products
 
 router.get('/', (req, res) => {
-  axios.get('https://kulturalbox-server.onrender.com/api/products')
+  axios.get('http://api.kulturalbox.com.ng/api/products')
     .then(response => {
       const products = response.data
       console.log(products)
@@ -37,7 +37,7 @@ router.post('/create', (req, res) => {
   const { name, category, price, description, imageUrl, stock, measurements } = req.body;
 
 const parsedMeasurements = measurements || [];
-  axios.post('https://kulturalbox-server.onrender.com/products', {
+  axios.post('http://api.kulturalbox.com.ng/api/products', {
       name,
       category,
       price,
@@ -62,7 +62,7 @@ router.put('/edit/:id', (req, res) => {
 
   const parsedMeasurements = measurements || [];
 
-  axios.put(`https://kulturalbox-server.onrender.com/product/${id}`, {
+  axios.put(`http://api.kulturalbox.com.ng/api/product/${id}`, {
       name,
       category,
       price,
@@ -82,7 +82,7 @@ router.put('/edit/:id', (req, res) => {
 // Delete a product
 router.post('/delete/:id', (req, res) => {
   const { id } = req.params;
-  axios.delete(`https://kulturalbox-server.onrender.com/products/${id}`)
+  axios.delete(`https://http://api.kulturalbox.com.ng/api/products/${id}`)
     .then(response => {
       res.redirect('products');
     })

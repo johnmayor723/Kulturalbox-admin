@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 // Get single product by ID
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  axios.get(`https://kulturalbox-server.onrender.com/api/products/${id}`)
+  axios.get(`http://api.kulturalbox.com.ng/api/products/${id}`)
     .then(response => {
       res.render('product', { product: response.data });
     })
@@ -82,7 +82,7 @@ router.put('/edit/:id', (req, res) => {
 // Delete a product
 router.post('/delete/:id', (req, res) => {
   const { id } = req.params;
-  axios.delete(`https://http://api.kulturalbox.com.ng/api/products/${id}`)
+  axios.delete(`https://api.kulturalbox.com.ng/api/products/${id}`)
     .then(response => {
       res.redirect('products');
     })
